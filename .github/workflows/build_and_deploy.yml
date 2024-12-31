@@ -27,7 +27,7 @@ jobs:
           python-version: '3.11'
 
       - name: Install Python packages
-        run: pip install -r requirements.txt
+        run: pip3.11 install -r requirements.txt
 
       - name: Deploy Snowpark app
         working-directory: first_snowpark_project
