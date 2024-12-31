@@ -1,0 +1,43 @@
+name: Deploy Snowpark Apps
+
+#Controls when the action will run
+on:
+  push:
+    branches:
+      - dev
+
+  #Allow you to run this workflow manually from the Action tab
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      #Checkout your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          repository: Thamizharasan-Gnanaprakasam/Public_repo/
+          ref: dev
+
+      - name: Setup Python 3.9
+        uses: actions/checkout@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install Python packages
+        run: pip install -r requirements.txt
+
+      - name: Deploy Snowpark app
+        working-directory: first_snowpark_project
+        env:
+          SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+          SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE_USER }}
+          SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
+          SNOWFLAKE_ROLE: ${{ secrets.SNOWFLAKE_ROLE }}
+          SNOWFLAKE_WAREHOUSE: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
+          SNOWFLAKE_DATABASE: ${{ secrets.SNOWFLAKE_DATABASE }}
+        run: python deploy_snowpark_app.py $GITHUB_WORKSPACE/first_snowpark_project
+
+
